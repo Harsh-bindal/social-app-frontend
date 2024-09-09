@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react'
 import "./post.css"
-import { MoreVert } from '@mui/icons-material'
 import action  from "../../assets/like.png"
 import heart from "../../assets/heart.png"
 import axios from "axios";
@@ -20,28 +19,60 @@ export default function Post({post}) {
     const PF= process.env.REACT_APP_PUBLIC_FOLDER;
 
     const { user:currentUser} =useContext(AuthContext);
+    const backendUrl="https://mern-backend-e2d0.onrender.com/api"
 
-    const likeHandler=()=>
-    {
+
+
+    const deletePost = async () => {
+        try {
+            await axios.delete(`${backendUrl}/posts/${post._id}`, {data:{userId: currentUser._id}});
+            alert("Post delelet successfully");
+            window.location.reload();
+        } catch (err) {
+            alert("Post deletion failed");
+        }
+    };
+
+    const updatePost = async ()=>{
+        const newDesc= prompt("Write your new description for the post");
+
         try{
+            await axios.put(`${backendUrl}/posts/${post._id}`,{userId:currentUser._id,desc:newDesc});
+            alert("Description changed successfully");
+            window.location.reload();
+        }
+        catch(err)
+        {
+            alert("Post updation failed", err);
+        }
 
-            axios.put("/posts/"+post._id+"/like",{userId:currentUser._id});
-        }catch(err){}
-       setLike(isLiked?like-1 : like+1)
-       setIsLiked(!isLiked)
     }
+
+    const likeHandler = async () => {
+        try {
+            await axios.put(`${backendUrl}/posts/${post._id}/like`, { userId: currentUser._id });
+        } catch (err) {
+            console.log("Like action failed");
+        }
+        setLike(isLiked ? like - 1 : like + 1);
+        setIsLiked(!isLiked);
+    };
 
     useEffect(()=>{
         setIsLiked(post.likes.includes(currentUser._id));
     },[currentUser._id,post.likes]);
 
- useEffect ( ()=>{
-      const fetchUsers = async ()=>{
-        const res = await axios.get(`/user/?userId=${post.userId}`);
-        setUsers(res.data);
-      }
-      fetchUsers();
- }, [post.userId])   
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const res = await axios.get(`${backendUrl}/user/?userId=${post.userId}`);
+                setUsers(res.data);
+            } catch (err) {
+                console.log("Fetching user data failed");
+            }
+        };
+        fetchUsers();
+    }, [post.userId]); 
 
 
 
@@ -57,7 +88,8 @@ export default function Post({post}) {
                     <span className="topPostDate">{moment(post.createdAt).fromNow()}</span>
                 </div>
                 <div className="postTopRight">
-                    <MoreVert/>
+                    <button onClick={updatePost} style={{color:'white',backgroundColor:"green"}} >Update</button>
+                   <button onClick={deletePost} style={{color:'blue', backgroundColor:'red'}}>Delete</button>
                 </div>
             </div>
             <div className="postCenter">

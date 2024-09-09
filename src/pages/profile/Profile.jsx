@@ -14,16 +14,20 @@ export default function Profile() {
   const[user,setUser]= useState({});
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const username=useParams().username;
+  const backendUrl="https://mern-backend-e2d0.onrender.com/api"
 
 
-
-  useEffect(()=>{
-       const fetchUser= async ()=>{
-            const res = await axios.get(`/user?username=${username}`);
+  useEffect(() => {
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get(`${backendUrl}/user?username=${username}`);
             setUser(res.data);
-          }
-          fetchUser();
-        },[username])
+        } catch (err) {
+            console.error("Failed to fetch user data", err);
+        }
+    };
+    fetchUser();
+}, [username]);
         
         return (
           <>

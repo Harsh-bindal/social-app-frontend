@@ -9,15 +9,19 @@ export default function Message({message,own}) {
 
   const [msgUser,setMsgUser]=useState({});
   const PF=process.env.REACT_APP_PUBLIC_FOLDER;
+  const backendUrl="https://mern-backend-e2d0.onrender.com/api"
 
-  useEffect(()=>{
-        const getUser = async()=>{
-             const res=await axios.get(`/user/?userId=${message.sender}`);
-             setMsgUser(res.data);
+  useEffect(() => {
+    const getUser = async () => {
+        try {
+            const res = await axios.get(`${backendUrl}/user/?userId=${message.sender}`);
+            setMsgUser(res.data);
+        } catch (err) {
+            console.error("Failed to fetch user data:", err);
         }
-        getUser();
-  },[message])
-console.log(msgUser)
+    };
+    getUser();
+}, [message.sender]);
 
   return (
     <div className={own ? "message own" : "message"}>

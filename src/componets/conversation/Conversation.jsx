@@ -8,13 +8,14 @@ export default function Conversation({conversation,currentUser}) {
 
       const [user,setUser] = useState(null)
       const PF=process.env.REACT_APP_PUBLIC_FOLDER;
+      const backendUrl="https://mern-backend-e2d0.onrender.com/api"
 
    useEffect(()=>{
       const friendsId= conversation.members.find((m)=> m!==currentUser._id);
 
       const getUser = async ()=>{
         try{
-          const res=await axios("/user?userId="+friendsId);
+          const res=await axios("https://mern-backend-e2d0.onrender.com/api/user?userId="+friendsId);
           setUser(res.data);
    
         }catch(err)

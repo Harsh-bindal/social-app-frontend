@@ -11,7 +11,7 @@ export default function Share() {
   const PF=process.env.REACT_APP_PUBLIC_FOLDER;
   const {user}=useContext(AuthContext);
   const [file,setFile]=useState(null);
-  
+  const backendUrl="https://mern-backend-e2d0.onrender.com/api"
   const desc=useRef();
    
   const handleChange = (e) =>{
@@ -34,27 +34,22 @@ export default function Share() {
     data.append("file",file);
     newPost.img=fileName;
 
-    try{
-      await axios.post("/upload",data);
-    }
-    catch(err)
-    {
+    try {
+      await axios.post(`${backendUrl}/upload`, data);
+    } catch (err) {
       console.log(err);
     }
   }
 
-  try{
-     await axios.post("/posts/",newPost);
-     window.location.reload();
-  }
-  catch(err)
-  {
-
+  try {
+    await axios.post(`${backendUrl}/posts`, newPost);
+    window.location.reload();
+  } catch (err) {
+    console.log(err);
   }
  }
 
   return (
-    
 
     <div className="Share">
 

@@ -11,6 +11,7 @@ export default function Login() {
   const password=useRef();
   const passwordAgain=useRef();
   const navigate = useNavigate();
+  const backendUrl="https://mern-backend-e2d0.onrender.com/api"
 
   const gotoHistory = ()=>{
     navigate("/login");
@@ -32,7 +33,7 @@ export default function Login() {
         password:password.current.value
       };
       try{
-         await axios.post("/auth/register",user);
+         await axios.post("https://mern-backend-e2d0.onrender.com/api/auth/register",user);
          gotoHistory();
       }
       catch(err)

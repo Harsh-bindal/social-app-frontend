@@ -19,14 +19,16 @@ export default function Messenger() {
     const [messages,setMessages] =useState([]);
     const [newMessage,setNewMessage]=useState("");
     const scrollRef=useRef();
+    const backendUrl="https://mern-backend-e2d0.onrender.com/api"
 
 
+    
 
     useEffect(()=>{
     const fetchConversations = async ()=>{
         try{
 
-            const res=await axios.get("/conversation/"+user._id);
+            const res=await axios.get(`${backendUrl}/conversation/${user._id}`);
             setConversations(res.data);
        
         }catch(err)
@@ -38,34 +40,33 @@ export default function Messenger() {
 
     },[user._id]);
 
-
-    useEffect(()=>{
-     
-     const getMessages= async ()=>{
-        try{
-            const res=await axios.get("/message/"+currentchat?._id);
-            setMessages(res.data)
-        }
-        catch(err)
-        {
-            console.log(err);
-        }
-     }
-     getMessages();
-    },[currentchat?._id]);
+    useEffect(() => {
+        const getMessages = async () => {
+            if (currentchat) {
+                try {
+                    const res = await axios.get(`${backendUrl}/message/${currentchat._id}`);
+                    setMessages(res.data);
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        };
+        getMessages();
+    }, [currentchat]);
 
     const handleChange = async (e)=>{
         e.preventDefault();
 
-        const message ={
-            sender:user._id,
-            conversationId:currentchat._id,
-            text:newMessage
-        }
+       
       
 
         try{
-           const res=await axios.post("/message",message);
+            const message ={
+                sender:user._id,
+                conversationId:currentchat._id,
+                text:newMessage
+            }
+           const res=await axios.post("https://mern-backend-e2d0.onrender.com/api/message",message);
            setMessages([...messages ,res.data])
            setNewMessage("");
         }
@@ -77,7 +78,7 @@ export default function Messenger() {
 
   useEffect(()=>{
   
-    scrollRef.current?.scrollIntoView({behaviour:"smooth"});
+    scrollRef.current?.scrollIntoView({behavior:"smooth"});
 
   },[messages])
 
