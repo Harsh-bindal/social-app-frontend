@@ -1,8 +1,8 @@
-import React from 'react'
-import "./register.css"
-import { useRef, } from 'react'
-import axios from "axios"
-import {useNavigate} from "react-router-dom"
+import React, { useRef } from 'react';
+import "./register.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function Login() {
@@ -17,31 +17,27 @@ export default function Login() {
     navigate("/login");
   }
 
-
-  const handleClick = async (e)=>{
+  const handleClick = async (e) => {
     e.preventDefault();
-    console.log(password.current.value);
-    console.log(passwordAgain.current.value);
-    if(password.current.value !== passwordAgain.current.value)
-    {
-      passwordAgain.current.setCustomValidity("Password don't match!");
-    }  else
-    {
-      const user ={
-        name:username.current.value,
-        email:email.current.value,
-        password:password.current.value
+    if (password.current.value !== passwordAgain.current.value) {
+      passwordAgain.current.setCustomValidity("Passwords don't match!");
+    } else {
+      const user = {
+        name: username.current.value,
+        email: email.current.value,
+        password: password.current.value,
       };
-      try{
-         await axios.post("https://mern-backend-e2d0.onrender.com/api/auth/register",user);
-         gotoHistory();
-      }
-      catch(err)
-      {
-        console.log(err);
+      try {
+        await axios.post(`${backendUrl}/auth/register`, user);
+        alert("User created successfully");
+        gotoHistory();
+      } catch (err) {
+        alert("Failed to create user: " + err.message);
       }
     }
-  }
+  };
+
+
 
   return (
 
@@ -57,7 +53,7 @@ export default function Login() {
 
 
             <div className="loginRight">
-             <form className="loginRightContainer"onSubmit={handleClick} >
+             <form className="loginRightContainer" onSubmit={handleClick} >
                 <input placeholder="UserName" required ref={username} className="loginSet" />
                 <input placeholder="Email" required type="email" ref={email} className="loginSet" />
                 <input placeholder="Password" type="password" required minLength={6} ref={password} className="loginSet" />

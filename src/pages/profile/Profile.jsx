@@ -56,17 +56,9 @@ export default function Profile() {
             <Feed username={username} />
             <ProfileRightbar user={user}/>
         </div>
-
-
     </div>
 
-
   </div>
-
-   
-
-  
-
 </>
   )
 }
