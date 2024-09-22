@@ -32,11 +32,9 @@ export default function Profile() {
         return (
           <>
 
-        <Topbar/> 
-
-    <div className="profile">
-        <Leftbar/>
-
+ <Topbar />
+<div className="profile">
+        <Leftbar />
     <div className="rightSide">
         <div className="rightSideTop">
             <div className="profileCover">
@@ -51,7 +49,7 @@ export default function Profile() {
 
         <div className="rightSideBottom">
             <Feed username={username} />
-            <ProfileRightbar user={user}/>
+            <ProfileRightbar paramsUser={user}/>
         </div>
     </div>
 

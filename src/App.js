@@ -20,7 +20,7 @@ function App() {
         <Route  exact path="/login" element={user ? <Navigate to ="/" /> : <Login />} />
         <Route  exact path="/register" element={user ? <Navigate to ="/"/> : <Register />} />
         <Route  exact path="/messenger" element={ !user ? <Navigate to ="/"/> : <Messenger />} />
-        <Route path="/profile/:username" element={user ? <Profile /> : <Navigate to="/login" />} />
+        <Route path="/profile/:username" element={user ?  <Navigate to ="/" /> : <Login />} />
     </Routes>
   </Router>
 

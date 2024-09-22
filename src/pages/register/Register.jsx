@@ -54,8 +54,8 @@ export default function Login() {
 
             <div className="loginRight">
              <form className="loginRightContainer" onSubmit={handleClick} >
-                <input placeholder="UserName" required ref={username} className="loginSet" />
-                <input placeholder="Email" required type="email" ref={email} className="loginSet" />
+                <input name="name" placeholder="UserName" required ref={username} className="loginSet" />
+                <input name="email" placeholder="Email" required type="email" ref={email} className="loginSet" />
                 <input placeholder="Password" type="password" required minLength={6} ref={password} className="loginSet" />
                 <input placeholder="Password Again" type="password" required ref={passwordAgain} className="loginSet" />
                 <button className="signUpButton" type="submit" >Sign Up</button>

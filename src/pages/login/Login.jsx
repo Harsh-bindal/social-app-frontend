@@ -1,4 +1,4 @@
-import { React,useContext,useRef } from 'react'
+import {useContext,useRef } from 'react'
 import "./login.css";
 import { AuthContext } from "../../context/AuthContext";
 import {loginCall} from "../../ApiCalls"
@@ -31,8 +31,8 @@ export default function Login() {
 
             <div className="loginRight">
              <form className="loginRightContainer" onSubmit={handleChange}>
-                <input placeholder="Email" autoComplete="on" required type="email" className="loginSet" ref={email} />
-                <input placeholder="Password" required type="password" minLength={6} ref={password} className="loginSet" />
+                <input name="email" placeholder="Email" autoComplete="on" required type="email" className="loginSet" ref={email} />
+                <input name="password" placeholder="Password" required type="password" minLength={6} ref={password} className="loginSet" />
                 <button className="loginButton" type="submit" disabled={isFetching} >{isFetching ? <CircularProgress></CircularProgress> : "LogIn"}</button>
                 <span className="passwordForgot">Forgot password?</span>
                 <button onClick={()=>{ navigate("/register")}} disabled={isFetching} className="registerButton"  >{isFetching ? <CircularProgress></CircularProgress> : "Register to New Account"}</button>
