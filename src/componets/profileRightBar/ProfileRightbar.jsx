@@ -30,7 +30,7 @@ export default function ProfileRightbar({user}) {
         const from=prompt("Where are you from");
         const password=prompt("Enter your new password");
 
-        const data={userId:user._id,city,from,password};
+        const data={userId:currentUser._id,city,from,password};
 
         try{
             await axios.put(`${backendUrl}/user/${currentUser._id}`,data);
@@ -110,8 +110,7 @@ export default function ProfileRightbar({user}) {
             <div className="rightbarFollowing">
             <img src={friend.profilePicture ? PF+friend.profilePicture : avatar} alt="" className="followingProfile" />
             <span className="followingName"  >{friend.name}</span>
-        </div>
-
+            </div>
             </Link>
         ))}          
        </div>        

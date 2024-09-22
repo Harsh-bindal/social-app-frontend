@@ -35,12 +35,9 @@ export default function Profile() {
         <Topbar/> 
 
     <div className="profile">
-
         <Leftbar/>
- 
 
     <div className="rightSide">
-
         <div className="rightSideTop">
             <div className="profileCover">
             <img src={user.coverPicture ? PF+user.coverPicture : noCover} alt="" className="profileCoverImg" />

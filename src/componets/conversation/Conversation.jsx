@@ -30,12 +30,9 @@ export default function Conversation({conversation,currentUser}) {
 
 
   return (
-   
         <div className="conversation">
          <img src={user?.profilePicture ? PF+user.profilePicture : avatar} alt="error" className="conversationUserPhoto" ></img>
             <span className="conversationUserName" >{user?.name}</span>
         </div>
-
-
   )
 }

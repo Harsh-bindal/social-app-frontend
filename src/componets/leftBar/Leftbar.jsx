@@ -15,7 +15,6 @@ export default function Leftbar() {
     const fetchAllUsers = async () => {
         try {
             const res = await axios.get(`${backendUrl}/user/allUsers`);
-            console.log(res);
             setUsers(res.data);
         } catch (err) {
             console.log("Error fetching allUsers: ", err.message);
@@ -66,7 +65,7 @@ export default function Leftbar() {
 
         <ul className="sideBarFriendList">
             {Users.map((u)=>
-            <Link to={`/profile/${u.name}`} key={u.id} style={{textDecoration:'none',color:'black'}} >
+            <Link to={`/profile/${u.name}`} key={u._id} style={{textDecoration:'none',color:'black'}} >
                <CloseFriends user={u} />
             </Link>
                )}  
