@@ -24,7 +24,7 @@ export default function Messenger() {
     const socket = useRef();
 
     useEffect(() => {
-        socket.current = io(`${backendUrl}`);
+        socket.current = io("https://mern-backend-e2d0.onrender.com");
         socket.current.on("getMessage", (data) => {
           setArrivalMessage({
             sender: data.senderId,
