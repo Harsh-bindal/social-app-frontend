@@ -5,7 +5,8 @@ import Message from "../../componets/message/Message"
 import ChatOnline from "../../componets/chatOnline/ChatOnline"
 import {  useRef, useState,useEffect,useContext } from "react"
 import { AuthContext } from "../../context/AuthContext"
-import axios from "axios"
+import axios from "axios";
+import { io } from "socket.io-client"; 
 
 
 export default function Messenger() {
@@ -13,11 +14,41 @@ export default function Messenger() {
     const[conversations,setConversations]=useState([]);
     const {user}=useContext(AuthContext);
     const [currentchat,setCurrentchat] =useState(null);
+    const [arrivalMessage, setArrivalMessage] = useState(null);
     const [messages,setMessages] =useState([]);
     const [newMessage,setNewMessage]=useState("");
     const scrollRef=useRef();
+    const [onlineUsers, setOnlineUsers] = useState([]);
     const[Users,setUsers]=useState([]);
-    const backendUrl="https://mern-backend-e2d0.onrender.com/api"
+    const backendUrl="https://mern-backend-e2d0.onrender.com/api";
+    const socket = useRef();
+
+    useEffect(() => {
+        socket.current = io("ws://localhost:8900");
+        socket.current.on("getMessage", (data) => {
+          setArrivalMessage({
+            sender: data.senderId,
+            text: data.text,
+            createdAt: Date.now(),
+          });
+        });
+      }, []);
+
+      useEffect(() => {
+        arrivalMessage &&
+          currentchat?.members.includes(arrivalMessage.sender) &&
+          setMessages((prev) => [...prev, arrivalMessage]);
+      }, [arrivalMessage, currentchat]);
+
+      useEffect(() => {
+        socket.current.emit("addUser", user._id);
+        socket.current.on("getUsers", (users) => {
+          setOnlineUsers(
+            user.followings.filter((f) => users.some((u) => u.userId === f))
+          );
+        });
+      }, [user]);
+   
 
 
     //Fetch all users
@@ -83,14 +114,27 @@ export default function Messenger() {
     // Sending message
     const handleChange = async (e) => {
         e.preventDefault();
-        try {
-          const message = {
+
+        const message = {
             sender: user._id,
+            text: newMessage,
             conversationId: currentchat._id,
-            text: newMessage
           };
+
+          const receiverId = currentchat.members.find(
+            (member) => member !== user._id
+          );
+
+          socket.current.emit("sendMessage", {
+            senderId: user._id,
+            receiverId,
+            text: newMessage,
+          });
+
+        try {
+       
           const res = await axios.post(`${backendUrl}/message`, message);
-          setMessages([...messages, res.data]);
+          setMessages([...messages, res.data]); // Use functional state update
           setNewMessage("");
         } catch (err) {
           console.log(err);
@@ -113,7 +157,7 @@ export default function Messenger() {
             <input type="text" placeholder="Search here for friends!" className="searchUsers"></input>
              
              {conversations.map((c)=>(
-                 <div onClick={()=>setCurrentchat(c)}> 
+                 <div  onClick={()=>setCurrentchat(c)}> 
                  <Conversation key={c._id} conversation={c} currentUser={user} ></Conversation>
                     </div>       
              ))}      
